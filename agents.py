@@ -1,5 +1,7 @@
 from agno.agent import Agent
 from agno.models.ollama import Ollama
+
+# from agno.tools.knowledge import KnowledgeTools
 from models import (
     CurriculumVitae,
     PerfilCandidato,
@@ -71,6 +73,7 @@ cv_agent = Agent(
     - Se alguma seção estiver vazia (ex: sem educação), omita essa seção
     - Responda em português brasileiro
     """,
+    markdown=True,
     output_schema=CurriculumVitae,
 )
 
@@ -78,6 +81,7 @@ employment_agent = Agent(
     name="Agente Recrutador",
     role="Buscar vagas reais nos editais do Porto do Pecém usando RAG",
     model=Ollama(id="llama3.1"),
+    # tools = [KnowledgeTools(knowledge=knowledge)]
     input_schema=PerfilCandidato,
     instructions="""
     Você é um recrutador especializado em vagas do Porto do Pecém.
@@ -151,5 +155,6 @@ education_agent = Agent(
     - Limite buscas para não travar (máximo 3-5 skills por vez)
     - Responda em português brasileiro
     """,
+    markdown=True,
     output_schema=PlanoEstudos,
 )
