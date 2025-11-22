@@ -9,12 +9,13 @@ from models import (
     GapAnalysisInput,
     GapAnalysis,
     PlanoEstudos,
+    CourseList
 )
 
 profile_agent = Agent(
     name="Agente Perfilador",
     role="Extrair e estruturar o perfil do candidato a partir de texto livre",
-    model=Ollama(id="llama3.1"),
+    model=Ollama(id="llama3.1:8b"),
     instructions="""
     Você é um especialista em extrair informações de perfis profissionais.
     
@@ -43,7 +44,7 @@ profile_agent = Agent(
 cv_agent = Agent(
     name="Agente Currículo",
     role="Criar um currículo para o usuário com base no perfil estruturado",
-    model=Ollama(id="llama3.1"),
+    model=Ollama(id="llama3.1:8b"),
     input_schema=PerfilCandidato,
     instructions="""
     Você é um especialista em criação de currículos profissionais.
@@ -79,7 +80,7 @@ cv_agent = Agent(
 employment_agent = Agent(
     name="Agente Recrutador",
     role="Buscar vagas reais nos editais do Porto do Pecém usando RAG",
-    model=Ollama(id="llama3.1"),
+    model=Ollama(id="llama3.1:8b"),
     # tools = [KnowledgeTools(knowledge=knowledge)]
     input_schema=PerfilCandidato,
     instructions="""
@@ -109,7 +110,7 @@ employment_agent = Agent(
 analyst_agent = Agent(
     name="Agente Analista de Carreira",
     role="Identificar os Skill Gaps entre o perfil do candidato e a vaga",
-    model=Ollama(id="llama3.1"),
+    model=Ollama(id="llama3.1:8b"),
     input_schema=GapAnalysisInput,
     instructions="""
     Você é um analista de carreira especializado em análise de habilidades faltantes.
@@ -135,7 +136,7 @@ analyst_agent = Agent(
 education_agent = Agent(
     name="Agente Educacional",
     role="Sugerir cursos para suprir os gaps de habilidades identificados",
-    model=Ollama(id="llama3.1"),
+    model=Ollama(id="llama3.1:8b"),
     input_schema=GapAnalysis,
     # tool = crawl4ai(),
     instructions="""
@@ -156,4 +157,21 @@ education_agent = Agent(
     """,
     markdown=True,
     output_schema=PlanoEstudos,
+)
+
+scrapper_agent = Agent(
+    name="Web Scrapper Agent",
+    model=Ollama(id="llama3.1:8b"),
+    role="Tratamento e limpeza de dados educacionais",
+    instructions="""
+    Você é um especialista em tratamento e limpeza de dados educacionais (ETL).,
+    Receba o texto bruto (markdown) de um site de cursos,
+    Identifique e separe cada curso individualmente,
+    CORREÇÃO ORTOGRÁFICA: Corrija erros de português (ex: 'Engenaria' -> 'Engenharia'),
+    NORMALIZAÇÃO ASCII: O output final DEVE estar sem acentos (ex: 'Lógica' -> 'Logica'),
+    Se um campo não for encontrado no texto, deixe como null (None),
+    Não invente informações,
+    """,
+    response_model=CourseList,
+    structured_outputs= True
 )
