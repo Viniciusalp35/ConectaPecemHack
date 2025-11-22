@@ -65,8 +65,7 @@ cv_agent = Agent(
        ## Skills
        - [Skills]
 
-    3. Inclua seções para Informações Pessoais, Educação, Experiência e Skills
-    4. Use bullet points para listar skills e experiências
+    3. Use bullet points para listar skills e experiências
 
     IMPORTANTE:
     - NÃO INVENTE informações - use APENAS o que está no perfil
