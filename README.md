@@ -42,14 +42,14 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
 git clone [https://github.com/seu-usuario/seu-projeto.git](https://github.com/seu-usuario/seu-projeto.git)
 cd seu-projeto
 
-### 2. Crie o ambiente virtual
+2. Crie o ambiente virtual
 python -m venv venv
 .\venv\Scripts\activate
 
-### 3. Instale as dependências
+3. Instale as dependências
 pip install -r requirements.txt
 
-### 4. Configure o database
+4. Configure o database
 docker run -d \
   -e POSTGRES_DB=ai \
   -e POSTGRES_USER=ai \
@@ -60,5 +60,9 @@ docker run -d \
   --name pgvector \
   agnohq/pgvector:16
 
-### 5. Para inicar os agentes
+5. Incie o database
+python init_db.py
+
+6. Para inicar os agentes
 python test_agents.py
+```

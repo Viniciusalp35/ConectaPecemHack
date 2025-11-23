@@ -89,7 +89,6 @@ async def test_employment_agent(
     print("🔄 Processando (Buscando na base vetorial)...\n")
 
     try:
-        # 1. Executa o agente (Agora ele retorna TEXTO, não objeto)
         result = await run_agent(employment_agent, perfil, stream=True)
 
         if result and result.content:
@@ -100,14 +99,10 @@ async def test_employment_agent(
             print(texto_da_vaga)  # Mostra o texto achado no banco
             print("-" * 30)
 
-            # --- A PONTE MÁGICA (WRAPPER) ---
-            # Criamos o objeto manualmente para satisfazer o próximo agente.
-            # Jogamos todo o texto na 'description'. O Analista vai ler tudo lá.
-
             vaga_adaptada = VagaEmprego(
                 title="Vaga Encontrada (Ver Descrição)",
-                description=texto_da_vaga,  # <--- O SEGREDO ESTÁ AQUI
-                requirements=[],  # Deixe vazio, o Analista extrai do texto acima
+                description=texto_da_vaga,
+                requirements=[],
             )
 
             print("🔄 Dados convertidos para objeto VagaEmprego para o Analista.")
@@ -178,14 +173,11 @@ async def test_education_agent(gaps: Optional[GapAnalysis]) -> Optional[PlanoEst
     print("🔄 Processando...\n")
 
     try:
-        # Executa o agente sem stream e sem output_schema forçado (retorna texto)
         result = await run_agent(education_agent, gaps, stream=False)
 
         if result and result.content:
             raw_content = result.content
 
-            # --- 1. LIMPEZA DO MARKDOWN ---
-            # O Gemini geralmente envolve o JSON em ```json ... ```
             json_match = re.search(r"```json\s*(.*?)\s*```", raw_content, re.DOTALL)
             if json_match:
                 json_str = json_match.group(1)
@@ -199,19 +191,16 @@ async def test_education_agent(gaps: Optional[GapAnalysis]) -> Optional[PlanoEst
                     json_str = raw_content
 
             try:
-                # --- 2. CONVERSÃO PARA DICIONÁRIO ---
+                # --- CONVERSÃO PARA DICIONÁRIO ---
                 data_dict = json.loads(json_str)
 
-                # --- 3. CORREÇÃO DO ERRO DE VALIDAÇÃO (O FIX) ---
-                # O LLM retorna strings em 'skill_gaps', mas o Pydantic quer objetos.
-                # Injetamos os objetos originais que já temos na variável 'gaps'.
                 if gaps and hasattr(gaps, "missing_skills"):
                     data_dict["skill_gaps"] = gaps.missing_skills
 
-                # --- 4. CRIAÇÃO DO OBJETO PYDANTIC ---
+                # --- CRIAÇÃO DO OBJETO PYDANTIC ---
                 plano = PlanoEstudos(**data_dict)
 
-                # --- 5. EXIBIÇÃO DOS RESULTADOS ---
+                # --- EXIBIÇÃO DOS RESULTADOS ---
                 print("✅ Plano de estudos gerado e convertido!")
                 print(f"\nCursos encontrados: {plano.quantidade}")
 
@@ -219,7 +208,7 @@ async def test_education_agent(gaps: Optional[GapAnalysis]) -> Optional[PlanoEst
                     print(f"Ordem sugerida: {plano.ordem}")
 
                 print("-" * 30)
-                # Mostra os primeiros 5 cursos (ajuste conforme necessidade)
+                # Mostra os primeiros 5 cursos
                 for curso in plano.cursos[:5]:
                     print(f"\n  - {curso.title}")
                     print(f"    Plataforma: {curso.provider}")
@@ -266,7 +255,7 @@ async def test_cv_agent(perfil: Optional[PerfilCandidato]) -> Optional[Curriculu
             cv = result.content
             print("✅ CV gerado!")
 
-            # Debug: verificar tipo e conteúdo
+            # Debug verificar tipo e conteúdo
             print(f"\n📊 Tipo do CV: {type(cv)}")
             print(f"📊 Tem cv_markdown? {hasattr(cv, 'cv_markdown')}")
 
@@ -356,9 +345,6 @@ async def test_single_agent(agent_name: str):
 
 
 if __name__ == "__main__":
-    # --- MÁGICA AQUI: Carrega o banco ANTES de rodar o asyncio ---
-
-    # Agora roda os agentes
     if len(sys.argv) > 1:
         agent_name = sys.argv[1]
         asyncio.run(test_single_agent(agent_name))

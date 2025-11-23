@@ -7,7 +7,7 @@ console = Console()
 def main():
     # 1. Cria o time
     console.print(
-        "\n[bold blue]🚀 SISTEMA DE EMPREGABILIDADE (MODE: TEAM ORCHESTRATION)[/bold blue]"
+        "\n[bold blue] SISTEMA DE EMPREGABILIDADE (MODE: TEAM ORCHESTRATION)[/bold blue]"
     )
     console.print("O Time de Agentes está pronto. Digite sua história para começar.\n")
 
@@ -17,7 +17,7 @@ def main():
             user_input = console.input("[bold green]Você:[/bold green] ").strip()
 
             if user_input.lower() in ["sair", "exit", "quit"]:
-                console.print("[bold blue]👋 Até logo![/bold blue]")
+                console.print("[bold blue] Até logo![/bold blue]")
                 break
 
             if not user_input:
