@@ -43,16 +43,13 @@ git clone [https://github.com/seu-usuario/seu-projeto.git](https://github.com/se
 cd seu-projeto
 
 ### 2. Crie o ambiente virtual
-```bash
 python -m venv venv
 .\venv\Scripts\activate
 
 ### 3. Instale as dependências
-```bash
 pip install -r requirements.txt
 
 ### 4. Configure o database
-```bash
 docker run -d \
   -e POSTGRES_DB=ai \
   -e POSTGRES_USER=ai \
@@ -63,6 +60,5 @@ docker run -d \
   --name pgvector \
   agnohq/pgvector:16
 
-  ### 5. Para inicar os agentes
-```bash
+### 5. Para inicar os agentes
 python test_agents.py
