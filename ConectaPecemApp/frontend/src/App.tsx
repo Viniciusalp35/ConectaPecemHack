@@ -3,9 +3,10 @@ import { LifeInterview } from './components/LifeInterview';
 import { TranslationDashboard } from './components/TranslationDashboard';
 import { OpportunityMatch } from './components/OpportunityMatch';
 import { StudyRoadmap } from './components/StudyRoadmap';
+import { SkillGapAnalysis } from './components/SkillGapAnalysis';
 import { Mic, User, Briefcase, Map } from 'lucide-react';
 
-type Screen = 'interview' | 'profile' | 'jobs' | 'roadmap';
+type Screen = 'interview' | 'profile' | 'jobs' | 'roadmap' | 'gapAnalysis';
 
 export default function App() {
   const [activeScreen, setActiveScreen] = useState<Screen>('interview');
@@ -16,8 +17,14 @@ export default function App() {
       <div className="flex-1 overflow-y-auto pb-20">
         {activeScreen === 'interview' && <LifeInterview />}
         {activeScreen === 'profile' && <TranslationDashboard />}
-        {activeScreen === 'jobs' && <OpportunityMatch />}
+        {activeScreen === 'jobs' && <OpportunityMatch onViewGapAnalysis={() => setActiveScreen('gapAnalysis')} />}
         {activeScreen === 'roadmap' && <StudyRoadmap />}
+        {activeScreen === 'gapAnalysis' && (
+          <SkillGapAnalysis 
+            onBack={() => setActiveScreen('jobs')}
+            onEnrollCourse={() => setActiveScreen('roadmap')}
+          />
+        )}
       </div>
 
       {/* Bottom Navigation */}
@@ -69,6 +76,18 @@ export default function App() {
           >
             <Map className="w-6 h-6" />
             <span className="text-xs">Plano</span>
+          </button>
+
+          <button
+            onClick={() => setActiveScreen('gapAnalysis')}
+            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
+              activeScreen === 'gapAnalysis'
+                ? 'bg-teal-50 text-teal-700'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <Map className="w-6 h-6" />
+            <span className="text-xs">Análise de Falta de Habilidades</span>
           </button>
         </div>
       </nav>
