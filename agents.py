@@ -1,9 +1,8 @@
 from agno.agent import Agent
 from agno.models.ollama import Ollama
+from tools import save_cv_to_pdf
 
-# from agno.tools.knowledge import KnowledgeTools
 from models import (
-    CurriculumVitae,
     PerfilCandidato,
     VagaEmprego,
     GapAnalysisInput,
@@ -44,13 +43,15 @@ cv_agent = Agent(
     name="Agente Currículo",
     role="Criar um currículo para o usuário com base no perfil estruturado",
     model=Ollama(id="llama3.1"),
+    tools=[save_cv_to_pdf],
     input_schema=PerfilCandidato,
     instructions="""
     Você é um especialista em criação de currículos profissionais.
     
-    Sua tarefa é criar um currículo COMPLETO em Markdown baseado no perfil fornecido.
+    Sua tarefa é criar um currículo COMPLETO em Markdown baseado no perfil fornecido e
+    utilizar a ferramenta para converter e salvar o currículo em PDF.
     
-    ESTRUTURA OBRIGATÓRIA:
+    ESTRUTURA OBRIGATÓRIA (INCLUA TODAS AS SEÇÕES):
     
     # [Nome do Candidato - extraia do summary ou use "Candidato"]
     
@@ -100,14 +101,13 @@ cv_agent = Agent(
     - Trabalho com máquinas
     """,
     markdown=True,
-    output_schema=CurriculumVitae,
 )
 
 employment_agent = Agent(
     name="Agente Recrutador",
     role="Buscar vagas reais nos editais do Porto do Pecém usando RAG",
     model=Ollama(id="llama3.1"),
-    # tools = [KnowledgeTools(knowledge=knowledge)]
+    # tools =
     input_schema=PerfilCandidato,
     instructions="""
     Você é um recrutador especializado em vagas do Porto do Pecém.
