@@ -54,4 +54,4 @@ if __name__ == "__main__":
     else:
         url = "https://www.senai-ce.org.br/cursos?cidade=44"
     resultado = asyncio.run(Webscrapper(url))
-    print(resultado.markdown[0:500])
+    print(resultado[0:500])
