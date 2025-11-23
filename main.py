@@ -17,10 +17,8 @@ async def main():
 
         try:
             response = time.arun(user_input, session_id=session_id, stream=True)
-            last_result = None
             async for chunk in response:
-                last_result = chunk
-            return last_result
+                print(chunk.content, end="", flush=True)
 
         except Exception as e:
             print("\nErro:", str(e))
