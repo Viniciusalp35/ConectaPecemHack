@@ -1,4 +1,4 @@
-# 🚀 [Nome do Seu Projeto] - Sistema Multiagentes de Carreira
+# 🚀 [Conecta Pecém] - Sistema Multiagentes de Carreira
 
 ## 📝 Sobre o Projeto
 
