@@ -85,5 +85,6 @@ class CurriculumVitae(BaseModel):
         ..., description="Currículo completo formatado em Markdown (.md)"
     )
 
-class CourseList():
+
+class CourseList:
     courses: list[Curso]

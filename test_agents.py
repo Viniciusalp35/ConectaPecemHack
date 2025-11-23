@@ -1,13 +1,14 @@
 import asyncio
+import re
+import json
 import sys
 from typing import Optional
-
 from agents import (
     profile_agent,
     employment_agent,
     analyst_agent,
-    education_agent,
     cv_agent,
+    education_agent,
 )
 
 from models import (
@@ -15,8 +16,8 @@ from models import (
     PerfilCandidato,
     VagaEmprego,
     GapAnalysis,
-    PlanoEstudos,
     CurriculumVitae,
+    PlanoEstudos,
 )
 
 
@@ -43,9 +44,9 @@ async def test_profile_agent() -> Optional[PerfilCandidato]:
     print("=" * 60)
 
     user_input = """
-    Olá, me chamo Mateus e tenho experiência com solda.
-    Trabalhei 3 anos em uma empresa de construção.
-    Fiz curso técnico em mecânica.
+    Olá, me chamo Mateus e tenho experiência com obra.
+    Sei ler e escrever, sou alfabetizado, sei carregar peso e fazer trabalhos
+    braçais. Trabalhei informalmente como eletricista e gostaria de me especializar.
     """
 
     print(f"\n📝 Input: {user_input.strip()}\n")
@@ -76,30 +77,46 @@ async def test_profile_agent() -> Optional[PerfilCandidato]:
 async def test_employment_agent(
     perfil: Optional[PerfilCandidato],
 ) -> Optional[VagaEmprego]:
-    """Testa o Agente Recrutador."""
+    """Testa o Agente Recrutador e ADAPTA a saída para o próximo agente."""
     print("\n" + "=" * 60)
     print("TESTE: Agente Recrutador")
     print("=" * 60)
 
     if perfil is None:
-        print("⚠️  Pulando teste - perfil não disponível")
         return None
 
     print(f"\n📝 Input (Perfil): {perfil.model_dump()}\n")
-    print("🔄 Processando...\n")
+    print("🔄 Processando (Buscando na base vetorial)...\n")
 
     try:
-        result = await run_agent(employment_agent, perfil, stream=False)
+        # 1. Executa o agente (Agora ele retorna TEXTO, não objeto)
+        result = await run_agent(employment_agent, perfil, stream=True)
+
         if result and result.content:
-            vaga = result.content
-            print("✅ Vaga encontrada!")
-            print(f"\nTítulo: {vaga.title}")
-            print(f"Descrição: {vaga.description}")
-            print(f"Requisitos: {vaga.requirements}")
-            return vaga
+            texto_da_vaga = result.content  # Isso é uma string Markdown
+
+            print("✅ Agente respondeu (Texto)!")
+            print("-" * 30)
+            print(texto_da_vaga)  # Mostra o texto achado no banco
+            print("-" * 30)
+
+            # --- A PONTE MÁGICA (WRAPPER) ---
+            # Criamos o objeto manualmente para satisfazer o próximo agente.
+            # Jogamos todo o texto na 'description'. O Analista vai ler tudo lá.
+
+            vaga_adaptada = VagaEmprego(
+                title="Vaga Encontrada (Ver Descrição)",
+                description=texto_da_vaga,  # <--- O SEGREDO ESTÁ AQUI
+                requirements=[],  # Deixe vazio, o Analista extrai do texto acima
+            )
+
+            print("🔄 Dados convertidos para objeto VagaEmprego para o Analista.")
+            return vaga_adaptada
+
         else:
-            print("❌ Agente retornou None")
+            print("❌ Agente retornou vazio")
             return None
+
     except Exception as e:
         print(f"❌ Erro: {e}")
         import traceback
@@ -148,7 +165,7 @@ async def test_analyst_agent(
 
 
 async def test_education_agent(gaps: Optional[GapAnalysis]) -> Optional[PlanoEstudos]:
-    """Testa o Agente Educacional."""
+    """Testa o Agente Educacional com parsing manual e injeção de tipos."""
     print("\n" + "=" * 60)
     print("TESTE: Agente Educacional")
     print("=" * 60)
@@ -161,22 +178,69 @@ async def test_education_agent(gaps: Optional[GapAnalysis]) -> Optional[PlanoEst
     print("🔄 Processando...\n")
 
     try:
+        # Executa o agente sem stream e sem output_schema forçado (retorna texto)
         result = await run_agent(education_agent, gaps, stream=False)
+
         if result and result.content:
-            plano = result.content
-            print("✅ Plano de estudos gerado!")
-            print(f"\nCursos encontrados: {plano.quantidade}")
-            print(f"Ordem sugerida: {plano.ordem}")
-            for curso in plano.cursos[:3]:  # Mostra primeiros 3
-                print(f"\n  - {curso.title}")
-                print(f"    Plataforma: {curso.provider}")
-                print(f"    URL: {curso.url}")
-            return plano
+            raw_content = result.content
+
+            # --- 1. LIMPEZA DO MARKDOWN ---
+            # O Gemini geralmente envolve o JSON em ```json ... ```
+            json_match = re.search(r"```json\s*(.*?)\s*```", raw_content, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(1)
+            else:
+                # Tenta encontrar o JSON bruto se não houver markdown
+                start = raw_content.find("{")
+                end = raw_content.rfind("}") + 1
+                if start != -1 and end != -1:
+                    json_str = raw_content[start:end]
+                else:
+                    json_str = raw_content
+
+            try:
+                # --- 2. CONVERSÃO PARA DICIONÁRIO ---
+                data_dict = json.loads(json_str)
+
+                # --- 3. CORREÇÃO DO ERRO DE VALIDAÇÃO (O FIX) ---
+                # O LLM retorna strings em 'skill_gaps', mas o Pydantic quer objetos.
+                # Injetamos os objetos originais que já temos na variável 'gaps'.
+                if gaps and hasattr(gaps, "missing_skills"):
+                    data_dict["skill_gaps"] = gaps.missing_skills
+
+                # --- 4. CRIAÇÃO DO OBJETO PYDANTIC ---
+                plano = PlanoEstudos(**data_dict)
+
+                # --- 5. EXIBIÇÃO DOS RESULTADOS ---
+                print("✅ Plano de estudos gerado e convertido!")
+                print(f"\nCursos encontrados: {plano.quantidade}")
+
+                if plano.ordem:
+                    print(f"Ordem sugerida: {plano.ordem}")
+
+                print("-" * 30)
+                # Mostra os primeiros 5 cursos (ajuste conforme necessidade)
+                for curso in plano.cursos[:5]:
+                    print(f"\n  - {curso.title}")
+                    print(f"    Plataforma: {curso.provider}")
+                    print(f"    URL: {curso.url}")
+                    print(f"    Skills: {', '.join(curso.skill_covered)}")
+
+                return plano
+
+            except json.JSONDecodeError as e:
+                print(f"❌ Erro ao decodificar JSON do texto: {e}")
+                print(f"Conteúdo recebido (início): {raw_content[:300]}...")
+                return None
+            except Exception as e:
+                print(f"❌ Erro de validação/conversão Pydantic: {e}")
+                return None
         else:
-            print("❌ Agente retornou None")
+            print("❌ Agente retornou None ou conteúdo vazio")
             return None
+
     except Exception as e:
-        print(f"❌ Erro: {e}")
+        print(f"❌ Erro geral na execução do agente: {e}")
         import traceback
 
         traceback.print_exc()
@@ -239,13 +303,13 @@ async def test_all_agents():
     perfil = await test_profile_agent()
 
     # Recrutador
-    # vaga = await test_employment_agent(perfil)
+    vaga = await test_employment_agent(perfil)
 
     # Analista
-    # gaps = await test_analyst_agent(perfil, vaga)
+    gaps = await test_analyst_agent(perfil, vaga)
 
     # Educacional
-    # plano = await test_education_agent(gaps)
+    plano = await test_education_agent(gaps)
 
     # CV
     cv = await test_cv_agent(perfil)
@@ -255,9 +319,9 @@ async def test_all_agents():
     print("RESUMO DOS TESTES")
     print("=" * 60)
     print(f"✅ Perfilador: {'OK' if perfil else 'FALHOU'}")
-    # print(f"✅ Recrutador: {'OK' if vaga else 'FALHOU'}")
-    # print(f"✅ Analista: {'OK' if gaps else 'FALHOU'}")
-    # print(f"✅ Educacional: {'OK' if plano else 'FALHOU'}")
+    print(f"✅ Recrutador: {'OK' if vaga else 'FALHOU'}")
+    print(f"✅ Analista: {'OK' if gaps else 'FALHOU'}")
+    print(f"✅ Educacional: {'OK' if plano else 'FALHOU'}")
     print(f"✅ CV: {'OK' if cv else 'FALHOU'}")
     print("=" * 60 + "\n")
 
@@ -292,6 +356,9 @@ async def test_single_agent(agent_name: str):
 
 
 if __name__ == "__main__":
+    # --- MÁGICA AQUI: Carrega o banco ANTES de rodar o asyncio ---
+
+    # Agora roda os agentes
     if len(sys.argv) > 1:
         agent_name = sys.argv[1]
         asyncio.run(test_single_agent(agent_name))

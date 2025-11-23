@@ -1,5 +1,5 @@
 from agno.team import Team
-from agno.models.ollama import Ollama
+from agno.models.google import Gemini
 from agents import (
     profile_agent,
     employment_agent,
@@ -12,7 +12,7 @@ from agents import (
 time = Team(
     name="Time para analise de perfis",
     members=[profile_agent, employment_agent, analyst_agent, education_agent, cv_agent],
-    model=Ollama(id="llama3.1"),
+    model=Gemini(id="gemini-2.5-pro"),
     instructions="""
         Você coordena um sistema de empregabilidade com 5 agentes especializados.
 

@@ -1,37 +1,30 @@
-import asyncio
-from agno.agent import Agent
 from agno.knowledge import Knowledge
-from agno.vectordb.lancedb import LanceDb, SearchType
-from agno.knowledge.embedder.google import GeminiEmbedder 
+from agno.vectordb.pgvector import PgVector
+from agno.knowledge.embedder.ollama import OllamaEmbedder
+from agno.db.postgres import PostgresDb
 
-courses_vector_db = LanceDb(
-        table_name="available_courses",
-        uri="/tmp/lancedb",
-        search_type=SearchType.hybrid,
-        embedder=GeminiEmbedder()
-        )
+db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
 
-jobs_vector_db = LanceDb(
-        table_name="job_offers",
-        uri="/tmp/lancedb",
-        search_type=SearchType.hybrid,
-        embedder=GeminiEmbedder()
-        )
+embedder = OllamaEmbedder(id="openhermes")
+
+course_content_db = PostgresDb(db_url=db_url, knowledge_table="course_contents")
+
+jobs_content_db = PostgresDb(db_url=db_url, knowledge_table="jobs_contents")
+
+courses_vector_db = PgVector(
+    table_name="available_courses",
+    db_url="postgresql+psycopg://ai:ai@localhost:5532/ai",
+    embedder=embedder,
+)
+
+jobs_vector_db = PgVector(
+    table_name="job_offers",
+    db_url="postgresql+psycopg://ai:ai@localhost:5532/ai",
+    embedder=embedder,
+)
 
 courses_knowledge = Knowledge(
-        vector_db=courses_vector_db,
-        )
-
-jobs_knowledge = Knowledge(
-        vector_db=jobs_vector_db
-        )
-
-courses_knowledge.add_content_async(
-    name="Cursos Disponíveis",
-    path="data/json_courses.json" 
+    vector_db=courses_vector_db,
 )
 
-jobs_knowledge.add_content_async(
-    name="Vagas Disponíveis",
-    path="data/job_offers.pdf" 
-)
+jobs_knowledge = Knowledge(vector_db=jobs_vector_db)
