@@ -1,0 +1,203 @@
+{
+  "courses": [
+    {
+      "title": "CONFECCIONADOR DE SANDÁLIAS RASTEIRAS E ACESSÓRIOS",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/confeccionador-de-sandalias-rasteiras-e-acessorios-34965",
+      "description": "CONFECCIONADOR DE SANDÁLIAS RASTEIRAS E ACESSÓRIOS",
+      "duration": "30/03/2026 a 28/05/2026",
+      "skill_covered": [],
+      "price": "R$ 299,80"
+    },
+    {
+      "title": "MONTADOR DE SISTEMAS FOTOVOLTAICOS",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/montador-de-sistemas-fotovoltaicos-34892",
+      "description": "MONTADOR DE SISTEMAS FOTOVOLTAICOS",
+      "duration": null,
+      "skill_covered": [],
+      "price": "R$ 299,80"
+    },
+    {
+      "title": "MONTADOR DE SISTEMAS FOTOVOLTAICOS",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/montador-de-sistemas-fotovoltaicos-34892",
+      "description": "Curso de Montador de Sistemas Fotovoltaicos",
+      "duration": "09/03/2026 a 13/05/2026",
+      "skill_covered": [
+        "Energias Renováveis"
+      ],
+      "price": "à vista R$ 2.009,00 ou 10x de R$ 200,90"
+    },
+    {
+      "title": "MONTADOR DE SISTEMAS FOTOVOLTAICOS",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/montador-de-sistemas-fotovoltaicos-35155",
+      "description": "Curso de Montador de Sistemas Fotovoltaicos",
+      "duration": "23/02/2026 a 28/04/2026",
+      "skill_covered": [
+        "Energias Renováveis"
+      ],
+      "price": "à vista R$ 2.009,00 ou 10x de R$ 200,90"
+    },
+    {
+      "title": "SOFT-STARTER",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/soft-starter-34904",
+      "description": "Curso de Automação e Mecatrônica",
+      "duration": "14/03/2026 a 28/03/2026",
+      "skill_covered": [
+        "Automação e Mecatrônica"
+      ],
+      "price": "à vista R$ 139,00 ou 2x de R$ 69,50"
+    },
+    {
+      "title": "ELETRICISTA DE AUTOMÓVEIS",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/eletricista-de-automoveis-34861",
+      "description": "Curso de Automotiva",
+      "duration": "19/01/2026 a 23/03/2026",
+      "skill_covered": [
+        "Automotiva"
+      ],
+      "price": "à vista R$ 1.199,00 ou 10x de R$ 119,90"
+    },
+    {
+      "title": "MECÂNICO DE MOTOR E CÂMBIO - ÁLCOOL E GASOLINA",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/mecanico-de-motor-e-cambio-alcool-e-gasolina-35158",
+      "description": "Curso de Automotiva",
+      "duration": "09/02/2026 a 15/04/2026",
+      "skill_covered": [
+        "Automotiva"
+      ],
+      "price": "à vista R$ 999,00 ou 10x de R$ 99,90"
+    },
+    {
+      "title": "ELETRICIDADE BÁSICA",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/eletricidade-básica-34860",
+      "description": "Curso de Eletroeletrônica",
+      "duration": "23/02/2026 a 28/04/2026",
+      "skill_covered": [
+        "Eletroeletrônica"
+      ],
+      "price": "à vista R$ 999,00 ou 10x de R$ 99,90"
+    },
+    {
+      "title": "ELETRICIDADE BÁSICA",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/eletricidade-basica-34860",
+      "description": "Curso de Eletroeletrônica",
+      "duration": "19/01/2026 a 09/02/2026",
+      "skill_covered": [],
+      "price": "à vista R$ 369,00 ou 4x de R$ 92,25"
+    },
+    {
+      "title": "TÉCNICO EM SISTEMAS DE ENERGIA RENOVÁVEL",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/tecnico-em-sistemas-de-energia-renovavel-35173",
+      "description": "Curso de Energias Renováveis",
+      "duration": "02/03/2026 a 22/09/2027",
+      "skill_covered": [],
+      "price": "Investimento: R$ 5.179,00 (em até 18x) ou à vista R$ 5.179,00"
+    },
+    {
+      "title": "MECÂNICO DE MANUTENÇÃO EM MOTOCICLETA - SEMPRESENCIAL",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/mecanico-de-manutencao-em-motocicleta-sempresencial-35171",
+      "description": "Curso de Automotiva",
+      "duration": "30/03/2026 a 25/07/2026",
+      "skill_covered": [],
+      "price": "à vista R$ 679,00 ou 7x de R$ 97,00"
+    },
+    {
+      "title": "INJEÇÃO ELETRÔNICA DIESEL",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/injecao-eletronica-diesel-34874",
+      "description": "Curso de Automotiva",
+      "duration": "30/03/2026 a 31/05/2026",
+      "skill_covered": [],
+      "price": "à vista R$ 899,00 ou 9x de R$ 99,89"
+    },
+    {
+      "title": "NR 35 - TRABALHO EM ALTURA PARA ELETRICISTA DE REDE",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/nr-35-trabalho-em-altura-para-eletricista-de-rede-34964",
+      "description": "Curso de Segurança do trabalho",
+      "duration": "28/03/2026 a 04/04/2026",
+      "skill_covered": [],
+      "price": ""
+    },
+    {
+      "title": "ALTURA PARA ELETRICISTA DE REDE",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/cad-eletrico-34851",
+      "description": "Eletroeletrônica, Presencial",
+      "duration": "28/03/2026 a 04/04/2026",
+      "skill_covered": [],
+      "price": "à vista R$ 409,00 ou 5x de R$ 81,80"
+    },
+    {
+      "title": "CAD ELÉTRICO",
+      "provider": "SENAI Barra do Ceará",
+      "url": "https://www.senai-ce.org.br/cad-eletrico-34851",
+      "description": "Eletroeletrônica, Presencial",
+      "duration": "09/02/2026 a 05/03/2026",
+      "skill_covered": [],
+      "price": "à vista R$ 299,00 ou 3x de R$ 99,67"
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
