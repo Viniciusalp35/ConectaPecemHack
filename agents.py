@@ -8,6 +8,7 @@ from models import (
     GapAnalysisInput,
     GapAnalysis,
     PlanoEstudos,
+    CourseList
 )
 
 profile_agent = Agent(

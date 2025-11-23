@@ -84,3 +84,6 @@ class CurriculumVitae(BaseModel):
     cv_markdown: str = Field(
         ..., description="Currículo completo formatado em Markdown (.md)"
     )
+
+class CourseList():
+    courses: list[Curso]
