@@ -9,6 +9,7 @@ from models import (
     GapAnalysisInput,
     GapAnalysis,
     PlanoEstudos,
+    Curso,
     CourseList
 )
 
@@ -161,17 +162,35 @@ education_agent = Agent(
 
 scrapper_agent = Agent(
     name="Web Scrapper Agent",
-    model=Ollama(id="llama3.1:8b"),
+    model=Ollama(id="llama3.1:8b",options={"temperature":0.0, "num_gpu": 99}),
     role="Tratamento e limpeza de dados educacionais",
-    instructions="""
-    Você é um especialista em tratamento e limpeza de dados educacionais (ETL).,
-    Receba o texto bruto (markdown) de um site de cursos,
-    Identifique e separe cada curso individualmente,
-    CORREÇÃO ORTOGRÁFICA: Corrija erros de português (ex: 'Engenaria' -> 'Engenharia'),
-    NORMALIZAÇÃO ASCII: O output final DEVE estar sem acentos (ex: 'Lógica' -> 'Logica'),
-    Se um campo não for encontrado no texto, deixe como null (None),
-    Não invente informações,
-    """,
-    response_model=CourseList,
+    instructions=[
+ "Você é um especialista em tratamento e limpeza de dados educacionais (ETL).",
+
+        "Receba o texto bruto (markdown) de um arquivo de entrada com cursos e lixo vindo do html.",
+
+        "Identifique e separe cada curso individualmente.",
+
+        "Extraia as informações do curso: nome do curso - normalmente em caixa alta exemplo: MECANICA, data inicial, data final, horario em que o curso ocorre, preço,área de atuação ,local em que é realizado, quem provê o curso",
+
+        "CORREÇÃO ORTOGRÁFICA: Corrija erros de português (ex: 'Engenaria' -> 'Engenharia').",
+
+        "NORMALIZAÇÃO ASCII: O output final DEVE estar sem acentos (ex: 'Lógica' -> 'Logica').",
+
+        "Se um campo não for encontrado no texto, deixe como null (None).",
+
+        "Não invente informações.",
+
+        "O que nao foi util, descarte.",
+
+        "A partir dos dados extraidos, prepare a saida do arquivo para conter os seguintes campos:    title: <titulo do curso>, provider <Plataforma ou instituição>, url=<url do curso>, description=<descrição do curso>, duração=<Coloque data de inicio e data final>, skill_covered=<RACIOCINE QUAIS HABILIDADES SERAO APRENDIDAS>, price=<Preço do curso>", 
+
+        "Procure manter coerencia entre o nome do curso e o URL que voce pegar, se tiver muito diferente é provavel que esteja errado,se errado, coloque o campo title como null",
+        "A entrada pode estar cortada, caso nao contenha todas as informações sobre um curso voce pode colocar descarta-lo",
+
+        "prepare os campos anteriores como JSON, onde o retorno será uma lista de objetos curso dentro desse JSON com os campos anteriores como 'chaves'"
+
+    ],
+    output_schema=CourseList,
     structured_outputs= True
 )

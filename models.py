@@ -61,6 +61,7 @@ class Curso(BaseModel):
     skill_covered: List[str] = Field(
         default_factory=list, description="Habilidades que este curso cobre"
     )
+    price: str = Field(None,description="Preço cobrado pelo curso")
 
 
 class PlanoEstudos(BaseModel):
@@ -85,5 +86,5 @@ class CurriculumVitae(BaseModel):
         ..., description="Currículo completo formatado em Markdown (.md)"
     )
 
-class CourseList():
+class CourseList(BaseModel):
     courses: list[Curso]

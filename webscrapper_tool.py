@@ -43,7 +43,7 @@ async def Webscrapper(url):
             url=url,
             config=Config
         )
-        return result.markdown
+    return str(result.markdown)
 
 
 
