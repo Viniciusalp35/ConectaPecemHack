@@ -44,7 +44,7 @@ async def test_profile_agent() -> Optional[PerfilCandidato]:
     print("=" * 60)
 
     user_input = """
-    Olá, me chamo Mateus e tenho experiência com obra.
+    Meu nome é Mateus e tenho experiência com obra.
     Sei ler e escrever, sou alfabetizado, sei carregar peso e fazer trabalhos
     braçais. Trabalhei informalmente como eletricista e gostaria de me especializar.
     """
