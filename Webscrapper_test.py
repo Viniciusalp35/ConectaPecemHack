@@ -11,7 +11,7 @@ async def main():
     crops = trinner(raw_data)
     for i in range(len(crops)):
         try:
-            print(f"Carregando crop {i+1}")
+            print(f"🔄 Carregando crop {i+1}")
             result = await scrapper_agent.arun(input=crops[i])
 
             if result.content and result.content.courses:
@@ -33,8 +33,9 @@ async def main():
 
     # with open("Resultado_MD.txt","w",encoding='utf-8') as MD:
     #     MD.write(dados)
+    print("Carregamento de Cursos finalizado ✅\nResultados podem ser encontrados no arquivo Resultado_LLM.json")
 
-    with open("Resultados_LLM.txt","w",encoding="utf-8") as teste:
+    with open("Resultados_LLM.json","w",encoding="utf-8") as teste:
         teste.write(str(json_formatado))
 
 
